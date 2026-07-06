@@ -1,0 +1,5 @@
+django
+djangorestframework
+drf-yasg #Libreria para la documentacion
+djangorestframework-simplejwt[crypto] #Libreria para generar los jwt
+psycopg2-binary #Conectar con postgres

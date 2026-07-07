@@ -1,8 +1,10 @@
+from django.urls import is_valid_path
+
 from users.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from users.serializers import UserRegisterSerializer, UserSerializer
+from users.serializers import UserRegisterSerializer, UserSerializer, UserUpdateSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class RegisterView(APIView):
@@ -21,3 +23,13 @@ class UserView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def patch(self, request):
+        user = User.objects.get(id=request.user.id)
+        serializer = UserUpdateSerializer(user, request.data)
+        
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        

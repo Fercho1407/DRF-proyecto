@@ -1,3 +1,5 @@
+from functools import partial
+
 from django.urls import is_valid_path
 
 from users.models import User
@@ -25,11 +27,10 @@ class UserView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def patch(self, request):
-        user = User.objects.get(id=request.user.id)
-        serializer = UserUpdateSerializer(user, request.data)
+        serializer = UserUpdateSerializer(request.user, data=request.data, partial=True)
         
         serializer.is_valid(raise_exception=True)
-
         serializer.save()
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
         
